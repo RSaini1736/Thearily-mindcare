@@ -1,0 +1,179 @@
+<%- include('../partials/header') %>
+
+<section class="dashboard-section">
+  <div class="container">
+    <!-- Welcome Header -->
+    <div class="dashboard-header" data-aos="fade-down">
+      <div class="welcome-card therapist-welcome">
+        <div class="welcome-content">
+          <div class="welcome-avatar therapist-avatar">
+            <span class="avatar-initial"><%= user.username.charAt(0).toUpperCase() %></span>
+          </div>
+          <div class="welcome-text">
+            <h1 class="welcome-title">Hello, Dr. <%= user.username %> 👩‍⚕️</h1>
+            <p class="welcome-subtitle">Manage your students, upcoming sessions, and resources here</p>
+          </div>
+        </div>
+        <div class="welcome-stats">
+          <div class="stat-item">
+            <div class="stat-number"><%= activeStudents || 0 %></div>
+            <div class="stat-label">Active Students</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-number"><%= sessions.length || 0 %></div>
+            <div class="stat-label">Upcoming Sessions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Students Card -->
+      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="dashboard-card students-card">
+          <div class="card-header">
+            <div class="card-icon students-icon">
+              <i data-lucide="users"></i>
+            </div>
+            <div class="card-title-group">
+              <h4 class="card-title">Your Students</h4>
+              <p class="card-subtitle">Recent active patients</p>
+            </div>
+          </div>
+          
+          <div class="card-content">
+            <div class="student-list">
+              <% if (sessions && sessions.length > 0) { %>
+                <% sessions.forEach(session => { %>
+                  <% if (session.student) { %>
+                    <div class="student-item">
+                      <div class="student-avatar">
+                        <img src="https://i.pravatar.cc/40?u=<%= session.student._id %>" alt="<%= session.student.username %>">
+                      </div>
+                      <div class="student-info">
+                        <h6 class="student-name"><%= session.student.username %></h6>
+                        <p class="student-status">
+                          <span class="status-dot active"></span>
+                          Next session: <%= new Date(session.date).toDateString() %> at <%= session.time %>
+                        </p>
+                      </div>
+                      <a href="/chat/<%= session.student._id %>" class="btn btn-outline-success btn-sm student-action">
+                        <i data-lucide="message-circle"></i>
+                      </a>
+                    </div>
+                  <% } %>
+                <% }) %>
+              <% } else { %>
+                <p class="text-center text-muted">No active students yet.</p>
+              <% } %>
+            </div>
+          </div>
+          
+          <div class="card-footer">
+            <a href="/therapist/manage-sessions" class="btn btn-success w-100">
+              <i data-lucide="settings" class="me-2"></i>
+              Manage Students
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schedule Card -->
+      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+        <div class="dashboard-card schedule-card">
+          <div class="card-header">
+            <div class="card-icon schedule-icon">
+              <i data-lucide="calendar"></i>
+            </div>
+            <div class="card-title-group">
+              <h4 class="card-title">Your Schedule</h4>
+              <p class="card-subtitle">Upcoming appointments</p>
+            </div>
+          </div>
+          
+          <div class="card-content">
+            <div class="schedule-list">
+              <% if (sessions && sessions.length > 0) { %>
+                <% sessions.forEach(session => { %>
+                  <% if (session.student) { %>
+                    <div class="schedule-item">
+                      <div class="schedule-time">
+                        <div class="time-display"><%= session.time %></div>
+                        <div class="date-display"><%= new Date(session.date).toDateString() %></div>
+                      </div>
+                      <div class="schedule-details">
+                        <h6 class="session-patient">Session with <%= session.student.username %></h6>
+                        <p class="session-type">Therapy Session</p>
+                      </div>
+                      <div class="schedule-actions">
+                        <a href="" class="btn btn-outline-success btn-sm">
+                          <i data-lucide="video"></i> Connect
+                        </a>
+                      </div>
+                    </div>
+                  <% } %>
+                <% }) %>
+              <% } else { %>
+                <p class="text-center text-muted">No upcoming sessions scheduled.</p>
+              <% } %>
+            </div>
+          </div>
+          
+          <div class="card-footer">
+            <a href="/therapist/availability" class="btn btn-success w-100">
+              <i data-lucide="plus" class="me-2"></i>
+              Add Availability
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Therapist Tools -->
+      <div class="col-12" data-aos="fade-up" data-aos-delay="300">
+        <div class="dashboard-card tools-card">
+          <div class="card-header">
+            <div class="card-icon tools-icon">
+              <i data-lucide="briefcase"></i>
+            </div>
+            <div class="card-title-group">
+              <h4 class="card-title">Professional Tools</h4>
+              <p class="card-subtitle">Resources and management tools</p>
+            </div>
+          </div>
+          
+          <div class="card-content">
+            <div class="tools-grid">
+              <a href="/therapist/notes" class="tool-item">
+                <div class="tool-icon">
+                  <i data-lucide="clipboard"></i>
+                </div>
+                <span class="tool-label">Session Notes</span>
+              </a>
+              <a href="/therapist/assessments" class="tool-item">
+                <div class="tool-icon">
+                  <i data-lucide="file-check"></i>
+                </div>
+                <span class="tool-label">Assessments</span>
+              </a>
+              <a href="/therapist/new-blog" class="tool-item">
+                <div class="tool-icon">
+                  <i data-lucide="library"></i>
+                </div>
+                <span class="tool-label">add blogs</span>
+              </a>
+              <a href="/therapist/analytics" class="tool-item">
+                <div class="tool-icon">
+                  <i data-lucide="bar-chart-3"></i>
+                </div>
+                <span class="tool-label">Analytics</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

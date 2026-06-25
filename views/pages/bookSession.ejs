@@ -1,0 +1,71 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+    <h2 class="text-center mb-5 animate__animated animate__fadeInDown">Book a Session</h2>
+
+    <div class="row mb-5">
+        <% therapists.forEach(therapist => { %>
+            <div class="col-md-4 mb-4">
+                <div class="card therapist-card shadow-lg animate__animated animate__fadeInUp" style="overflow: hidden; border-radius: 15px;">
+                    <img 
+                        src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" 
+                        alt="Therapist Image" 
+                        class="card-img-top"
+                        style="object-fit: cover; height: 250px; background-color: #f8f9fa;"
+                    >
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><%= therapist.username %></h5>
+                        <p class="text-muted mb-1"><%= therapist.email %></p>
+                        <p><i class="bi bi-telephone"></i> 9911007732</p>
+                        <span class="badge bg-primary">Therapist</span>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+
+    <!-- Booking Form -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg p-4 booking-card animate__animated animate__fadeInUp">
+                <h4 class="text-center mb-4">Schedule Your Session</h4>
+                <form action="/student/book-session" method="POST">
+                    
+                    <!-- Select Therapist -->
+                    <div class="mb-3">
+                        <label class="form-label">Choose Therapist</label>
+                        <select name="therapist" class="form-control" required>
+                            <option value="">-- Select Therapist --</option>
+                            <% therapists.forEach(therapist => { %>
+                                <option value="<%= therapist._id %>"><%= therapist.username %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="mb-3">
+                        <label class="form-label">Select Date</label>
+                        <input type="date" name="date" class="form-control" required>
+                    </div>
+
+                    <!-- Time -->
+                    <div class="mb-3">
+                        <label class="form-label">Select Time</label>
+                        <input type="time" name="time" class="form-control" required>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mb-3">
+                        <label class="form-label">Notes (optional)</label>
+                        <textarea name="notes" class="form-control" rows="3" 
+                                  placeholder="Anything you’d like your therapist to know..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-gradient w-100">Book Session</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
